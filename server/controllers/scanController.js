@@ -22,11 +22,22 @@ const processScan = async (req, res) => {
     const attendee = await Attendee.findOne({ code: code.toUpperCase() });
 
     if (attendee) {
+      const fullName = `${attendee.firstName} ${attendee.lastName}`;
+
+      // ── Duplicate check: already successfully scanned? ────────────────────
+      const existing = await ScanLog.findOne({ attendeeId: attendee._id, status: 'success' });
+      if (existing) {
+        return res.status(409).json({
+          status: 'duplicate',
+          message: `${fullName} is already checked in.`,
+        });
+      }
+
       // ── Success path ──────────────────────────────────────────────────────
       await ScanLog.create({
         attendeeId: attendee._id,
         code: attendee.code,
-        name: `${attendee.firstName} ${attendee.lastName}`,
+        name: fullName,
         email: attendee.email,
         scannedByUserId,
         scannedByName,
@@ -35,9 +46,9 @@ const processScan = async (req, res) => {
 
       return res.json({
         status: 'success',
-        message: `${attendee.firstName} ${attendee.lastName} scanned successfully.`,
+        message: `${fullName} scanned successfully.`,
         attendee: {
-          name: `${attendee.firstName} ${attendee.lastName}`,
+          name: fullName,
           email: attendee.email,
           code: attendee.code,
         },

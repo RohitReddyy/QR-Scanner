@@ -139,7 +139,8 @@ p  { color: var(--color-muted); }
 }
 .toast.success { background: var(--color-success); }
 .toast.error   { background: var(--color-danger); }
-.toast.info    { background: var(--color-primary); }
+.toast.info    { background: var(--color-warning); color: #1a202c; }
+.toast.loading { background: var(--color-primary); }
 
 /* ============================================================
    NAVBAR

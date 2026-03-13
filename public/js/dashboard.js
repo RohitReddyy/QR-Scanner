@@ -119,7 +119,11 @@
 
   // ── Validate code with backend ────────────────────────────────────────────
   async function validateCode(code) {
-    showToast('Validating…', 'info');
+    // Show spinner for 1.5s before showing result — gives a deliberate UX pause
+    showToast('⏳ Validating…', 'info', 10000);
+
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
     try {
       const res  = await fetch('/api/scan', {
         method:  'POST',
@@ -129,12 +133,14 @@
       const data = await res.json();
 
       if (res.ok && data.status === 'success') {
-        showToast(data.message, 'success', 4000);
+        showToast('✅ ' + data.message, 'success', 4000);
+      } else if (data.status === 'duplicate') {
+        showToast('⚠️ ' + data.message, 'info', 4000);
       } else {
-        showToast(data.message || 'Scan failed. Code not found.', 'error', 4000);
+        showToast('❌ ' + (data.message || 'Scan failed. Code not found.'), 'error', 4000);
       }
     } catch {
-      showToast('Network error. Could not validate code.', 'error');
+      showToast('❌ Network error. Could not validate code.', 'error');
     } finally {
       // Show "Scan Again" button so the user can rescan without refreshing
       scanBtn.style.display   = 'none';

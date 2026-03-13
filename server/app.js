@@ -19,6 +19,9 @@ connectDB();
 
 const app = express();
 
+// ─── Trust Vercel's reverse proxy (required for secure cookies to work) ───────
+app.set('trust proxy', 1);
+
 // ─── Security middleware ──────────────────────────────────────────────────────
 // Helmet sets secure HTTP headers. We relax CSP slightly for inline scripts
 // used in the frontend HTML pages (demo only).
@@ -52,6 +55,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 8 * 60 * 60 * 1000, // 8 hours
     },
   })

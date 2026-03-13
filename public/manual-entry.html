@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfraGard STL – Manual Entry</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="app-page">
+
+  <!-- ─── Navbar ─────────────────────────────────────────────────────────── -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a href="dashboard.html" class="brand-link">
+        <span class="brand-icon">🛡️</span>
+        <span class="brand-text">InfraGard STL</span>
+      </a>
+    </div>
+
+    <ul class="navbar-links">
+      <li class="mobile-only">
+        <a href="logs.html">Logs</a>
+      </li>
+      <li>
+        <a href="manual-entry.html" class="active">Manual Entry</a>
+      </li>
+      <li>
+        <button class="btn btn-ghost btn-sm" id="logoutBtn">Logout</button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ─── Page content ────────────────────────────────────────────────────── -->
+  <main class="page-content">
+    <div class="form-card">
+      <h2 class="form-card-title">Add Attendee</h2>
+      <p class="form-card-subtitle">Manually register a new attendee and generate their entry code.</p>
+
+      <form id="manualEntryForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name <span class="required">*</span></label>
+            <input type="text" id="firstName" name="firstName" placeholder="John" required />
+            <span class="field-error" id="firstNameError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name <span class="required">*</span></label>
+            <input type="text" id="lastName" name="lastName" placeholder="Doe" required />
+            <span class="field-error" id="lastNameError"></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="entryEmail">Email Address <span class="required">*</span></label>
+          <input type="email" id="entryEmail" name="email" placeholder="john@example.com" required />
+          <span class="field-error" id="entryEmailError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="code">Attendee Code <span class="required">*</span></label>
+          <div class="code-input-row">
+            <input
+              type="text"
+              id="code"
+              name="code"
+              placeholder="INFRA-4821-A9X2"
+              required
+              style="text-transform:uppercase;"
+            />
+            <button type="button" class="btn btn-secondary btn-sm" id="generateCodeBtn">
+              Auto-Generate
+            </button>
+          </div>
+          <span class="field-hint">Must be unique. Will be embedded in the attendee's QR code.</span>
+          <span class="field-error" id="codeError"></span>
+        </div>
+
+        <div id="entryError" class="alert alert-error" style="display:none;"></div>
+        <div id="entrySuccess" class="alert alert-success" style="display:none;"></div>
+
+        <!-- QR preview shown after successful submission (bonus) -->
+        <div id="qrPreviewWrap" style="display:none;" class="qr-preview-wrap">
+          <p class="qr-preview-label">QR Code Preview:</p>
+          <div id="qrPreview"></div>
+          <p id="qrCodeValue" class="qr-code-value"></p>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+          Add Attendee
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <!-- QRCode.js for client-side QR image generation -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="js/manual-entry.js"></script>
+</body>
+</html>

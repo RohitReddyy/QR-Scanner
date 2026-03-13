@@ -1,0 +1,24 @@
+{
+  "name": "infragard-qr-scanner-demo",
+  "version": "1.0.0",
+  "description": "InfraGard Saint Louis front-desk QR scan demo application",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js",
+    "seed": "node server/scripts/seed.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-mongo": "^5.1.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "express-session": "^1.18.0",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "mongoose": "^8.2.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

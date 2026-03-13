@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfraGard STL – Front Desk Login</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="auth-page">
+
+  <div class="auth-card">
+    <div class="auth-logo">
+      <img src="images/infragard-logo.png" alt="InfraGard STL" onerror="this.style.display='none'" />
+      <h1>InfraGard Saint Louis</h1>
+      <p class="auth-subtitle">Front Desk Portal</p>
+    </div>
+
+    <form id="loginForm" novalidate>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="frontdesk@infragardstl.org"
+          autocomplete="username"
+          required
+        />
+        <span class="field-error" id="emailError"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="••••••••"
+          autocomplete="current-password"
+          required
+        />
+        <span class="field-error" id="passwordError"></span>
+      </div>
+
+      <div id="loginError" class="alert alert-error" style="display:none;"></div>
+
+      <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
+        Sign In
+      </button>
+    </form>
+  </div>
+
+  <script src="js/login.js"></script>
+</body>
+</html>

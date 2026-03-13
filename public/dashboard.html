@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfraGard STL – Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="app-page">
+
+  <!-- ─── Navbar ─────────────────────────────────────────────────────────── -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span class="brand-icon">🛡️</span>
+      <span class="brand-text">InfraGard STL</span>
+    </div>
+
+    <ul class="navbar-links">
+      <!-- "Logs" visible only on mobile via CSS -->
+      <li class="mobile-only">
+        <a href="logs.html">Logs</a>
+      </li>
+      <li>
+        <a href="manual-entry.html">Manual Entry</a>
+      </li>
+      <li>
+        <button class="btn btn-ghost btn-sm" id="logoutBtn">Logout</button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ─── Hero / Scanner section ────────────────────────────────────────── -->
+  <main class="hero">
+    <div class="hero-content">
+      <div class="scan-icon-wrap" id="scanIconWrap" title="Click to scan">
+        <svg class="scan-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="QR Code Scanner">
+          <!-- QR frame corners -->
+          <rect x="4" y="4" width="16" height="4" rx="2" fill="currentColor"/>
+          <rect x="4" y="4" width="4" height="16" rx="2" fill="currentColor"/>
+          <rect x="44" y="4" width="16" height="4" rx="2" fill="currentColor"/>
+          <rect x="56" y="4" width="4" height="16" rx="2" fill="currentColor"/>
+          <rect x="4" y="56" width="16" height="4" rx="2" fill="currentColor"/>
+          <rect x="4" y="44" width="4" height="16" rx="2" fill="currentColor"/>
+          <rect x="44" y="56" width="16" height="4" rx="2" fill="currentColor"/>
+          <rect x="56" y="44" width="4" height="16" rx="2" fill="currentColor"/>
+          <!-- Inner QR pattern -->
+          <rect x="14" y="14" width="10" height="10" rx="1" fill="currentColor"/>
+          <rect x="40" y="14" width="10" height="10" rx="1" fill="currentColor"/>
+          <rect x="14" y="40" width="10" height="10" rx="1" fill="currentColor"/>
+          <rect x="32" y="32" width="4" height="4" fill="currentColor"/>
+          <rect x="38" y="32" width="4" height="4" fill="currentColor"/>
+          <rect x="32" y="38" width="4" height="4" fill="currentColor"/>
+          <rect x="38" y="38" width="4" height="4" fill="currentColor"/>
+          <!-- Scan line -->
+          <rect x="8" y="31" width="48" height="2" rx="1" fill="#4f9ef8" opacity="0.8"/>
+        </svg>
+      </div>
+
+      <h2 class="hero-title">Scan Attendee QR Code</h2>
+      <p class="hero-subtitle" id="mobileHint">
+        Open this application on a mobile device to scan barcodes.
+      </p>
+
+      <!-- Tooltip wrapper for disabled state on desktop -->
+      <div class="scan-btn-wrap">
+        <button
+          id="scanBtn"
+          class="btn btn-primary btn-scan"
+          disabled
+          aria-describedby="desktopScanHint"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          Scan QR Code
+        </button>
+        <span class="scan-desktop-hint" id="desktopScanHint">
+          Open application in mobile to scan the barcode
+        </span>
+      </div>
+
+      <!-- Rescan button – appears after a successful scan on mobile -->
+      <button id="rescanBtn" class="btn btn-secondary btn-scan" style="display:none;">
+        Scan Again
+      </button>
+    </div>
+
+    <!-- ── Camera / scanner viewport (mobile only) ──────────────────────── -->
+    <div id="scannerContainer" class="scanner-container" style="display:none;">
+      <div class="scanner-viewport">
+        <video id="scannerVideo" playsinline autoplay muted></video>
+        <div class="scanner-overlay">
+          <div class="scanner-frame"></div>
+        </div>
+      </div>
+      <button id="closeScannerBtn" class="btn btn-ghost btn-sm close-scanner-btn">✕ Close Scanner</button>
+    </div>
+
+    <!-- ── Toast notifications ───────────────────────────────────────────── -->
+    <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+  </main>
+
+  <!-- QR Scanner library (jsQR – works in all mobile browsers, no native API required) -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

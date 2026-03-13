@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfraGard STL – Scan Logs</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="app-page">
+
+  <!-- ─── Navbar ─────────────────────────────────────────────────────────── -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a href="dashboard.html" class="brand-link">
+        <span class="brand-icon">🛡️</span>
+        <span class="brand-text">InfraGard STL</span>
+      </a>
+    </div>
+
+    <ul class="navbar-links">
+      <li class="mobile-only">
+        <a href="logs.html" class="active">Logs</a>
+      </li>
+      <li>
+        <a href="manual-entry.html">Manual Entry</a>
+      </li>
+      <li>
+        <button class="btn btn-ghost btn-sm" id="logoutBtn">Logout</button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ─── Page content ────────────────────────────────────────────────────── -->
+  <main class="page-content">
+    <div class="page-header">
+      <h2>Scan Logs</h2>
+
+      <!-- Search / filter -->
+      <div class="logs-toolbar">
+        <input
+          type="search"
+          id="searchInput"
+          class="search-input"
+          placeholder="Search by name, code, or email…"
+        />
+        <button class="btn btn-secondary btn-sm" id="exportBtn">Export CSV</button>
+      </div>
+    </div>
+
+    <!-- Spinner while loading -->
+    <div id="logsLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading logs…</p>
+    </div>
+
+    <!-- Empty state -->
+    <div id="logsEmpty" class="empty-state" style="display:none;">
+      <p>No scan logs found.</p>
+    </div>
+
+    <!-- Table wrapper (scrolls horizontally on small screens) -->
+    <div class="table-wrap" id="tableWrap" style="display:none;">
+      <table class="logs-table" id="logsTable">
+        <thead>
+          <tr>
+            <th>Date &amp; Time</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Front-Desk Employee</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="logsBody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="js/logs.js"></script>
+</body>
+</html>

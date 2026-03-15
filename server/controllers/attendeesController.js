@@ -17,6 +17,12 @@ const manualEntry = async (req, res) => {
   const upperCode = code.toUpperCase().trim();
 
   try {
+    // Check email uniqueness
+    const emailExists = await Attendee.findOne({ email: email.toLowerCase().trim() });
+    if (emailExists) {
+      return res.status(409).json({ error: 'An attendee with this email already exists.' });
+    }
+
     // Check code uniqueness
     const existing = await Attendee.findOne({ code: upperCode });
     if (existing) {

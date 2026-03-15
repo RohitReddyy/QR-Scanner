@@ -1,6 +1,5 @@
 /**
  * logs.js – Fetches and renders scan logs.
- * Includes search/filter and CSV export.
  */
 
 (function () {
@@ -25,9 +24,6 @@
   const tableWrap    = document.getElementById('tableWrap');
   const logsBody     = document.getElementById('logsBody');
   const searchInput  = document.getElementById('searchInput');
-  const exportBtn    = document.getElementById('exportBtn');
-
-  let allLogs = []; // Cache for CSV export and client-side filtering
 
   // ── Fetch logs ────────────────────────────────────────────────────────────
   async function fetchLogs(search = '') {
@@ -40,7 +36,6 @@
       const res = await fetch(url);
       if (!res.ok) throw new Error('Failed to fetch logs');
       const logs = await res.json();
-      allLogs = logs;
       renderLogs(logs);
     } catch (err) {
       logsLoading.innerHTML = `<p style="color:var(--color-danger)">Error: ${err.message}</p>`;
@@ -100,33 +95,6 @@
     searchTimer = setTimeout(() => {
       fetchLogs(searchInput.value.trim());
     }, 350); // debounce 350ms
-  });
-
-  // ── CSV export ────────────────────────────────────────────────────────────
-  exportBtn.addEventListener('click', () => {
-    if (!allLogs.length) return;
-
-    const headers = ['Date & Time', 'Code', 'Name', 'Email', 'Front-Desk Employee', 'Status'];
-    const rows = allLogs.map((log) => [
-      formatDate(log.scannedAt),
-      log.code,
-      log.name || '',
-      log.email || '',
-      log.scannedByName,
-      log.status,
-    ]);
-
-    const csv = [headers, ...rows]
-      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-      .join('\n');
-
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = `scan-logs-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
   });
 
   // ── Initial load ──────────────────────────────────────────────────────────

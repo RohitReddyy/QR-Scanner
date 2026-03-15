@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const Attendee = require('../models/Attendee');
+const ScanLog = require('../models/ScanLog');
 
 /**
  * POST /api/attendees/manual-entry
@@ -24,8 +25,20 @@ const manualEntry = async (req, res) => {
 
     const attendee = await Attendee.create({ firstName, lastName, email, code: upperCode });
 
+    // Auto check-in: create a success scan log so this attendee is already
+    // marked as checked in and won't need to be scanned at the door.
+    await ScanLog.create({
+      attendeeId:      attendee._id,
+      code:            upperCode,
+      name:            `${firstName} ${lastName}`,
+      email:           email,
+      scannedByUserId: req.session.userId,
+      scannedByName:   req.session.userName,
+      status:          'success',
+    });
+
     return res.status(201).json({
-      message: `Attendee "${firstName} ${lastName}" added successfully.`,
+      message: `Attendee "${firstName} ${lastName}" added and checked in successfully.`,
       attendee,
     });
   } catch (err) {

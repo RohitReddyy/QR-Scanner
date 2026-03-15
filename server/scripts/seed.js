@@ -24,6 +24,12 @@ const FRONTDESK_USERS = [
     password: 'Demo@123',
     role: 'frontdesk',
   },
+  {
+    name: 'Rohit',
+    email: 'rohit@gmail.com',
+    password: 'Rohit@123',
+    role: 'frontdesk',
+  },
 ];
 
 // ─── Sample attendees ─────────────────────────────────────────────────────────

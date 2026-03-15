@@ -170,6 +170,12 @@ p  { color: var(--color-muted); }
   text-decoration: none;
 }
 .brand-icon { font-size: 1.4rem; }
+.navbar-logo {
+  height: 36px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
 .brand-text {
   color: #fff;
   font-weight: 700;

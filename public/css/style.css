@@ -572,6 +572,9 @@ p  { color: var(--color-muted); }
 }
 .badge-success { background: #c6f6d5; color: #276749; }
 .badge-failure { background: #fed7d7; color: #9b2c2c; }
+.badge-pending { background: #e2e8f0; color: #4a5568; }
+
+.page-desc { font-size: 0.9rem; color: var(--color-muted); margin-bottom: 20px; }
 
 /* Loading / empty states */
 .loading-state,

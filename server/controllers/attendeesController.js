@@ -53,16 +53,76 @@ const manualEntry = async (req, res) => {
 
 /**
  * GET /api/attendees
- * Returns all attendees (for debug/demo purposes).
+ * Returns all attendees. Supports ?search=<term> to filter by name or email.
+ * Also annotates each attendee with checkedIn: true/false.
  */
 const getAttendees = async (req, res) => {
   try {
-    const attendees = await Attendee.find().sort({ createdAt: -1 }).lean();
-    return res.json(attendees);
+    const { search } = req.query;
+    const filter = {};
+
+    if (search) {
+      const regex = new RegExp(search, 'i');
+      filter.$or = [
+        { firstName: regex },
+        { lastName: regex },
+        { email: regex },
+        { code: regex },
+      ];
+    }
+
+    const attendees = await Attendee.find(filter).sort({ createdAt: -1 }).lean();
+
+    // Look up which attendees already have a success scan log
+    const checkedInIds = await ScanLog.distinct('attendeeId', { status: 'success' });
+    const checkedInSet = new Set(checkedInIds.map(String));
+
+    const result = attendees.map((a) => ({
+      ...a,
+      checkedIn: checkedInSet.has(String(a._id)),
+    }));
+
+    return res.json(result);
   } catch (err) {
     console.error('Attendees fetch error:', err);
     return res.status(500).json({ error: 'Server error fetching attendees.' });
   }
 };
 
-module.exports = { manualEntry, getAttendees };
+/**
+ * POST /api/attendees/:id/checkin
+ * Manually checks in an attendee by ID (used from the Registered Users page).
+ */
+const checkInById = async (req, res) => {
+  try {
+    const attendee = await Attendee.findById(req.params.id);
+    if (!attendee) {
+      return res.status(404).json({ error: 'Attendee not found.' });
+    }
+
+    const fullName = `${attendee.firstName} ${attendee.lastName}`;
+
+    // Prevent duplicate check-in
+    const existing = await ScanLog.findOne({ attendeeId: attendee._id, status: 'success' });
+    if (existing) {
+      return res.status(409).json({ error: `${fullName} is already checked in.` });
+    }
+
+    await ScanLog.create({
+      attendeeId:      attendee._id,
+      code:            attendee.code,
+      name:            fullName,
+      email:           attendee.email,
+      scannedByUserId: req.session.userId,
+      scannedByName:   req.session.userName,
+      status:          'success',
+    });
+
+    return res.json({ message: `${fullName} checked in successfully.` });
+  } catch (err) {
+    console.error('Check-in error:', err);
+    return res.status(500).json({ error: 'Server error during check-in.' });
+  }
+};
+
+module.exports = { manualEntry, getAttendees, checkInById };

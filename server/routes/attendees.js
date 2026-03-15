@@ -1,7 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const { requireAuth } = require('../middleware/auth');
-const { manualEntry, getAttendees } = require('../controllers/attendeesController');
+const { manualEntry, getAttendees, checkInById } = require('../controllers/attendeesController');
 
 const router = express.Router();
 
@@ -18,7 +18,10 @@ router.post(
   manualEntry
 );
 
-// GET /api/attendees  (protected – debug/demo)
+// GET /api/attendees  (protected) — supports ?search=<term>
 router.get('/', requireAuth, getAttendees);
+
+// POST /api/attendees/:id/checkin  (protected)
+router.post('/:id/checkin', requireAuth, checkInById);
 
 module.exports = router;
